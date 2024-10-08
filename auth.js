@@ -39,7 +39,7 @@ signupBtn?.addEventListener("click", async () => {
   if (signUpError) {
     document.getElementById("error-msg").textContent = signUpError.message;
   } else {
-    const { error: insertError } = await supabase.from("Table_1").insert([
+    const { error: insertError } = await supabase.from("Table_2").insert([
       {
         firstName: firstName,
         lastName: lastName,
