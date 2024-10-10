@@ -1,10 +1,22 @@
-const profileDataDiv = document.getElementById('profileData');
+const { createClient } = window.supabase;
 
-let session = null;
+const supabaseUrl = "https://egzhuriimugvkjiauphl.supabase.co";
+const supabaseKey =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVnemh1cmlpbXVndmtqaWF1cGhsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjQwNzEzNjcsImV4cCI6MjAzOTY0NzM2N30.29e4s0hYCEB3e4m0GDB2WgSpEDbiJSSC4FOg5aU8ZOk";
+
+const supabase = createClient(supabaseUrl, supabaseKey);
+
+const profileDataDiv = document.getElementById('profile-data');
+
+// let session = null;
 
 async function getSession(){
-    session = await supabase.auth.getSession();
-    return session;
+    const { data, error } = await supabase.auth.getSession();
+    if (error) {
+        console.log('Error getting session:', error);
+        return null;
+    }
+    return data.session;
 }
 
 //Call the async function
@@ -15,7 +27,7 @@ getSession().then(session => {
 });
 
 async function getUserProfile(session) {
-    const {data: userProfile, error} = await supabase.from("Table_2").select('*').eq('id', session.user.id).single();
+    const {data: userProfile, error} = await supabase.from("Table_2").select('*');
 
     if (error){
         document.getElementById("error-msg").textContent = error.message;
@@ -27,14 +39,19 @@ async function getUserProfile(session) {
 }
 
 async function fetchProfiles() {
-    const sessions = await supabase.auth.getSession();
-    const userProfile = await getUserProfile(session);
-    if (userProfile) {
-        console.log('User Profile',userProfile);
-        profileDataDiv.innerHTML = '<p><strong>First Name:</strong> ${userProfile.firstName}</p>'+
-        '<p><strong>Last Name:</strong> ${userProfile.lastName}</p>'+
-        '<p><strong>City:</strong> ${userProfile.city}</p>'+
-        '<p><strong>Email:</strong> ${userProfile.email}</p>';
+    const session = await getSession();
+    if (session) {
+        const userProfile = await getUserProfile();
+        if (userProfile) {
+            console.log('User Profile', userProfile);
+            profileDataDiv.innerHTML = `
+                <p><strong>First Name:</strong> ${userProfile[0].firstName}</p>
+                <p><strong>Last Name:</strong> ${userProfile[0].lastName}</p>
+                <p><strong>City:</strong> ${userProfile[0].city}</p>
+                <p><strong>Email:</strong> ${userProfile[0].email}</p>`;
+        }
+    } else {
+        console.log('No active session found');
     }
 }
 
