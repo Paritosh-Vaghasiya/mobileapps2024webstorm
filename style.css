@@ -49,7 +49,7 @@ input::placeholder {
 }
 
 input:focus {
-    border-color: #007BFF; /* Bright blue border on focus */
+    border-color: white; /* Bright blue border on focus */
     outline: none; /* Remove default outline */
 }
 
