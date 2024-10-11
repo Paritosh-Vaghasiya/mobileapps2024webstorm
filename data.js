@@ -6,17 +6,26 @@ const supabaseKey =
 
 const supabase = createClient(supabaseUrl, supabaseKey);
 
+const updateBtn = document.getElementById("updateBtn");
+updateBtn?.addEventListener("click", async () => {
+  window.location.href = "update.html";
+});
+
+const logoutBtnDisplay = document.getElementById("logoutBtnDisplay");
+logoutBtnDisplay?.addEventListener("click", async () => {
+  window.location.href = "logout.html";
+});
+
 const profileDataDiv = document.getElementById('profile-data');
 
-// let session = null;
-
-async function getSession(){
-    const { data, error } = await supabase.auth.getSession();
-    if (error) {
-        console.log('Error getting session:', error);
-        return null;
-    }
-    return data.session;
+async function getSession() {
+  const { data, error } = await supabase.auth.getSession();
+  if (error) {
+    console.log("Error getting session:", error);
+    return null;
+  }
+  console.log("Session data:", data); // Log the session data
+  return data.session;
 }
 
 //Call the async function
@@ -26,7 +35,7 @@ getSession().then(session => {
     console.log('Error getting session: ', error);
 });
 
-async function getUserProfile(session) {
+async function getUserProfile() {
     const {data: userProfile, error} = await supabase.from("Table_2").select('*');
 
     if (error){
