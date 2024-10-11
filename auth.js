@@ -22,6 +22,16 @@ loginBtn?.addEventListener("click", async () => {
   }
 });
 
+const signupBtnIndex = document.getElementById("signupBtn-index");
+signupBtnIndex?.addEventListener("click", async () => {
+  window.location.href = "signup.html";
+})
+
+const loginBtnSignup = document.getElementById("loginBtn-signup");
+loginBtnSignup?.addEventListener("click", async () => {
+  window.location.href = "index.html";
+});
+
 //Signup
 const signupBtn = document.getElementById("signupBtn");
 signupBtn?.addEventListener("click", async () => {
